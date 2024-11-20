@@ -54,6 +54,12 @@ void delete_list(node_t** head) {
 int main() {
     node_t* head = NULL;
 
+    // Create the linked list by pushing elements to the front
+    head = push_front(head, 4);
+    head = push_front(head, 3);
+    head = push_front(head, 2);
+    head = push_front(head, 1);
+
     // Print the original list
     printf("Original List:\n");
     print_list(head);
