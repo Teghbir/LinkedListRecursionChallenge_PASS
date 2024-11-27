@@ -42,11 +42,72 @@ void display(node_t* head) {
     }
 
     node_t* temp = head;
-    do {
+    while (1) {
         printf("%d -> ", temp->data);
         temp = temp->next;
-    } while (temp != head);
+        if (temp == head) {
+            break;
+        }
+    }
     printf("(head)\n");
+}
+
+// Function to remove a node at a specific position (1-based indexing)
+node_t* remove_at_position(node_t* head, int position) {
+    if (head == NULL) {
+        printf("Error: List is empty\n");
+        return NULL;
+    }
+
+    // Handle invalid position
+    if (position <= 0) {
+        printf("Error: Invalid position\n");
+        return head;
+    }
+
+    node_t* temp = head;
+    node_t* prev = NULL;
+
+    // If removing the head node
+    if (position == 1) {
+        // Find the last node
+        while (temp->next != head) {
+            temp = temp->next;
+        }
+
+        if (temp == head) {
+            // Single node case
+            free(head);
+            return NULL;
+        }
+
+        // Update the last node's next pointer and remove the head
+        temp->next = head->next;
+        node_t* to_delete = head;
+        head = head->next;
+        free(to_delete);
+        return head;
+    }
+
+    // Traverse the list to find the node at the specified position
+    int count = 1;
+    temp = head;
+    while (count < position) {
+        prev = temp;
+        temp = temp->next;
+
+        // Break if we complete one loop without finding the position
+        if (temp == head) {
+            printf("Error: Position out of range\n");
+            return head;
+        }
+        count++;
+    }
+
+    // Remove the node
+    prev->next = temp->next;
+    free(temp);
+    return head;
 }
 
 // Main function
@@ -63,6 +124,19 @@ int main() {
     printf("Circular Linked List: ");
     display(head);
 
+    // Remove a node at position 2
+    int position = 2;
+    printf("Removing node at position %d\n", position);
+    head = remove_at_position(head, position);
+
+    // Display the updated circular linked list
+    printf("Updated Circular Linked List: ");
+    display(head);
+
+    // Try removing a node at an invalid position
+    position = 10;
+    printf("Removing node at position %d\n", position);
+    head = remove_at_position(head, position);
+
     return 0;
 }
-
